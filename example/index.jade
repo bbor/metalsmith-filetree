@@ -1,0 +1,36 @@
+---
+title: Example fileTree
+---
+
+link(rel="stylesheet" type="text/css" href="http://www.thecssninja.com/demo/css_tree/_styles.css")
+
+mixin printTree(obj)
+  - if (obj.path == '/')
+    ol.tree
+      mixin printFiles(obj.files)
+      mixin printDirs(obj.children)
+  - else
+    ol
+      mixin printFiles(obj.files)
+      mixin printDirs(obj.children)
+
+mixin printFiles(files)
+  - if (files && files.length)
+    - each file in files
+      li.file
+        a(href=file.path)= file.title
+
+mixin printDirs(dirs)
+  - if (dirs && dirs.length)
+    - each dir in dirs
+      li
+        label(for=dir.path.replace(/\//g,'-'))= dir.name
+        input(id=dir.path.replace(/\//g,'-'), type="checkbox")= dir.name
+        mixin printTree(dir)
+
+mixin printTree(fileTree.path['/'])
+
+p
+  b fileTree
+  pre= JSON.stringify(fileTree.path['/'], null, 2)
+
